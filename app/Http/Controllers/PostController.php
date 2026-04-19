@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Post\CreateRequest;
 use App\Models\Post;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
@@ -15,12 +15,8 @@ class PostController extends Controller
         return view('posts.index', compact('posts'));
     }
 
-    public function store(Request $request)
+    public function store(CreateRequest $request)
     {
-        $request->validate([
-            'body' => 'required|string',
-        ]);
-
         Post::create([
             'user_id' => Auth::id(),
             'body' => $request->input('body'),
