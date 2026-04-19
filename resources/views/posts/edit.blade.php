@@ -1,21 +1,11 @@
 <x-app-layout>
-    <div class="max-w-2xl mx-auto p-6">
-        @if ($errors->any())
-            <div style="color: red; margin-bottom: 10px;">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <form method="POST" action="{{ route('posts.update', $post) }}">
-            @csrf
-            @method('PUT')
-            <x-input-label for="body" value="投稿内容" />
-            <input id="body" type="text" name="body" value="{{ old('body', $post->body) }}" required />
-            <button type="submit">更新</button>
-        </form>
+    <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+        @include('posts.partials.post-form', [
+            'action' => route('posts.update', $post),
+            'method' => 'PUT',
+            'post' => $post,
+            'title' => '投稿を編集',
+            'button' => '更新'
+        ])
     </div>
 </x-app-layout>
