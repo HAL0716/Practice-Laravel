@@ -2,10 +2,11 @@
 
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    return redirect()->route(Auth::check() ? 'posts.index' : 'login');
 });
 
 Route::middleware('auth')->group(function () {
