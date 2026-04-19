@@ -17,6 +17,7 @@
             rows="1"
             class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200 dark:bg-gray-700 dark:border-gray-500 dark:text-gray-300"
             placeholder="メッセージを入力...">{{ old('body', $post->body ?? '') }}</textarea>
+            <x-input-error :messages="$errors->get('body')" class="mt-2" />
     </div>
 
     <div class="text-right">
