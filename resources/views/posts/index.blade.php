@@ -18,14 +18,16 @@
                         (編集済み)
                     </span>
                 @endif
-                @if($post->user_id === auth()->id())
+                @can('update', $post)
                     <a href="{{ route('posts.edit', $post) }}">編集</a>
+                @endcan
+                @can('delete', $post)
                     <form method="POST" action="{{ route('posts.destroy', $post) }}" style="display:inline;">
                         @csrf
                         @method('DELETE')
                         <button type="submit">削除</button>
                     </form>
-                @endif
+                @endcan
             </div>
         @endforeach
 
