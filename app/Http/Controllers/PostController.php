@@ -24,4 +24,15 @@ class PostController extends Controller
 
         return redirect()->route('posts.index');
     }
+
+    public function destroy(Post $post)
+    {
+        if ($post->user_id !== Auth::id()) {
+            abort(403, 'この投稿を削除する権限はありません。');
+        }
+
+        $post->delete();
+
+        return redirect()->route('posts.index');
+    }
 }

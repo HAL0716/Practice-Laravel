@@ -13,6 +13,13 @@
         @foreach($posts as $post)
             <div>
                 {{ $post->user_name ?? $post->user?->name ?? '匿名' }} : {{ $post->body }}
+                @if($post->user_id === auth()->id())
+                    <form method="POST" action="{{ route('posts.destroy', $post) }}" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit">削除</button>
+                    </form>
+                @endif
             </div>
         @endforeach
 
