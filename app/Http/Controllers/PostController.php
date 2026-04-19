@@ -11,17 +11,17 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::all();
-
-        return view('posts.index', compact('posts'));
+        return view('posts.index', [
+            'posts' => Post::latestList(),
+        ]);
     }
 
     public function store(CreateRequest $request)
     {
-        Post::create([
-            'user_id' => Auth::id(),
-            'body' => $request->input('body'),
-        ]);
+        Post::createForUser(
+            Auth::id(),
+            $request->body
+        );
 
         return redirect()->route('posts.index');
     }
@@ -37,9 +37,7 @@ class PostController extends Controller
     {
         $this->authorize('update', $post);
 
-        $post->update([
-            'body' => $request->input('body'),
-        ]);
+        $post->updateBody($request->body);
 
         return redirect()->route('posts.index');
     }
@@ -48,7 +46,7 @@ class PostController extends Controller
     {
         $this->authorize('delete', $post);
 
-        $post->delete();
+        $post->deletePost();
 
         return redirect()->route('posts.index');
     }
