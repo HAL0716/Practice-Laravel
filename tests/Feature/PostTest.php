@@ -39,6 +39,10 @@ class PostTest extends TestCase
     public function test_post_creation_validation_failure(): void
     {
         $this->actingAsUser()
+            ->post('/posts', [])
+            ->assertSessionHasErrors('body');
+
+        $this->actingAsUser()
             ->post('/posts', ['body' => ''])
             ->assertSessionHasErrors('body');
 
