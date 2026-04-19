@@ -27,9 +27,7 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
-        if ($post->user_id !== Auth::id()) {
-            abort(403, 'この投稿を削除する権限はありません。');
-        }
+        $this->authorize('delete', $post);
 
         $post->delete();
 
