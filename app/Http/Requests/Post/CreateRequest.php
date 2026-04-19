@@ -21,7 +21,7 @@ class CreateRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'body' => trim($this->body),
+            'body' => trim((string) $this->input('body', '')),
         ]);
     }
 
