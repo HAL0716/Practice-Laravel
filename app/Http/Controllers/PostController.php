@@ -20,9 +20,11 @@ class PostController extends Controller
 
     public function store(CreateRequest $request): RedirectResponse
     {
+        ['body' => $body] = $request->validated();
+
         Post::createForUser(
             Auth::id(),
-            $request->body
+            $body,
         );
 
         return redirect()->route('posts.index');
@@ -39,7 +41,9 @@ class PostController extends Controller
     {
         $this->authorize('update', $post);
 
-        $post->updateBody($request->body);
+        ['body' => $body] = $request->validated();
+
+        $post->updateBody($body);
 
         return redirect()->route('posts.index');
     }
