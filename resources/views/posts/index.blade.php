@@ -13,7 +13,13 @@
         @foreach($posts as $post)
             <div>
                 {{ $post->user_name ?? $post->user?->name ?? '匿名' }} : {{ $post->body }}
+                @if($post->updated_at && $post->updated_at != $post->created_at)
+                    <span style="font-size: 12px; color: gray;">
+                        (編集済み)
+                    </span>
+                @endif
                 @if($post->user_id === auth()->id())
+                    <a href="{{ route('posts.edit', $post) }}">編集</a>
                     <form method="POST" action="{{ route('posts.destroy', $post) }}" style="display:inline;">
                         @csrf
                         @method('DELETE')
