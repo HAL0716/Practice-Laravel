@@ -6,9 +6,7 @@
     @endif
 
     <div>
-        <label for="body" class="text-sm font-medium text-gray-700 dark:text-gray-300">
-            {{ $title ?? '投稿' }}
-        </label>
+        <x-input-label for="body" :value="$title ?? '投稿'" />
 
         <textarea
             id="body"
