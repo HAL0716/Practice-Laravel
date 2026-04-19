@@ -1,0 +1,41 @@
+<x-app-layout>
+    <div class="max-w-2xl mx-auto p-6">
+        @if ($errors->any())
+            <div style="color: red; margin-bottom: 10px;">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        @foreach($posts as $post)
+            <div>
+                {{ $post->user_name ?? $post->user?->name ?? '匿名' }} : {{ $post->body }}
+                @if($post->updated_at && $post->updated_at != $post->created_at)
+                    <span style="font-size: 12px; color: gray;">
+                        (編集済み)
+                    </span>
+                @endif
+                @can('update', $post)
+                    <a href="{{ route('posts.edit', $post) }}">編集</a>
+                @endcan
+                @can('delete', $post)
+                    <form method="POST" action="{{ route('posts.destroy', $post) }}" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit">削除</button>
+                    </form>
+                @endcan
+            </div>
+        @endforeach
+
+        <form method="POST" action="{{ route('posts.store') }}">
+            @csrf
+            <x-input-label for="body" value="投稿内容" />
+            <input id="body" type="text" name="body" value="{{ old('body') }}" required />
+            <button type="submit">送信</button>
+        </form>
+    </div>
+</x-app-layout>
