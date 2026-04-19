@@ -123,9 +123,4 @@ class PostTest extends TestCase
     {
         return $this->actingAs($this->user);
     }
-
-    private function actingAsOtherUser()
-    {
-        return $this->actingAs($this->otherUser);
-    }
 }
