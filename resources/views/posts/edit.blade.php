@@ -3,7 +3,8 @@
         <form method="POST" action="{{ route('posts.update', $post) }}">
             @csrf
             @method('PUT')
-            <input type="text" name="body" value="{{ old('body', $post->body) }}" required>
+            <x-input-label for="body" value="投稿内容" />
+            <input id="body" type="text" name="body" value="{{ old('body', $post->body) }}" required />
             <button type="submit">更新</button>
         </form>
     </div>

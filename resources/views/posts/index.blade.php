@@ -31,7 +31,8 @@
 
         <form method="POST" action="{{ route('posts.store') }}">
             @csrf
-            <input type="text" name="body" value="{{ old('body') }}" required>
+            <x-input-label for="body" value="投稿内容" />
+            <input id="body" type="text" name="body" value="{{ old('body') }}" required />
             <button type="submit">送信</button>
         </form>
     </div>
