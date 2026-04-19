@@ -4,7 +4,7 @@
             <div class="flex">
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('posts.index') }}" class="flex items-center gap-2">
-                        <x-application-logo class="h-9 w-auto fill-current text-gray-800" />
+                        <x-application-logo class="h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                         <span class="font-bold text-lg">
                             {{ config('app.name', 'Laravel') }}
                         </span>
@@ -96,7 +96,7 @@
                 <a href="{{ route('login') }}" class="block">{{ __('Login') }}</a>
 
                 @if (Route::has('register'))
-                    <a href="{{ route('register') }}" class="block">{{ __('Register') }}</a>
+                    <a href="{{ route('register') }}" class="block text-gray-600 dark:text-gray-400">{{ __('Register') }}</a>
                 @endif
             @endauth
 

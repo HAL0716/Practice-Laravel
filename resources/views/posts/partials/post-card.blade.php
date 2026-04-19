@@ -1,16 +1,16 @@
 <div class="flex justify-between items-center mb-1">
-    <div class="flex items-center gap-3 text-sm font-semibold text-gray-800">
+    <div class="flex items-center gap-3 text-sm font-semibold text-gray-700 dark:text-gray-300">
         <span>
             {{ $post->user_name ?? $post->user?->name ?? '匿名' }}
         </span>
-        <span class="text-xs text-gray-400">
+        <span class="text-xs text-gray-400 dark:text-gray-500">
             {{ $post->created_at->format('Y/m/d H:i') }}
             @if($post->updated_at && $post->updated_at != $post->created_at)
                 <span class="ml-1">(編集済み)</span>
             @endif
         </span>
     </div>
-    <div class="text-right text-xs text-gray-400 space-y-1">
+    <div class="text-right text-xs text-gray-400 dark:text-gray-500 space-y-1">
         <div class="flex gap-2 justify-end text-sm">
             @can('update', $post)
                 <a href="{{ route('posts.edit', $post) }}"
@@ -34,6 +34,6 @@
         </div>
     </div>
 </div>
-<div class="text-gray-700">
+<div class="text-gray-700 dark:text-gray-300">
     {{ $post->body }}
 </div>

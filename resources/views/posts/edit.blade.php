@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="bg-white shadow-sm rounded-lg p-4">
+    <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
         @include('posts.partials.post-form', [
             'action' => route('posts.update', $post),
             'method' => 'PUT',
