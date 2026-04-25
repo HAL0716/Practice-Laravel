@@ -22,9 +22,19 @@ class PostTest extends TestCase
         $this->otherUser = User::factory()->create();
     }
 
+    public function test_posts_index_displays_posts(): void
+    {
+        Post::factory()->count(3)->create();
+
+        $this->actingAsUser()
+            ->get(route('posts.index'))
+            ->assertStatus(200)
+            ->assertViewHas('posts');
+    }
+
     public function test_post_creation_success(): void
     {
-        $response = $this->actingAsUser()->post('/posts', [
+        $response = $this->actingAsUser()->post(route('posts.store'), [
             'body' => 'This is a test post.',
         ]);
 
@@ -36,26 +46,26 @@ class PostTest extends TestCase
         ]);
     }
 
+    public function test_post_creation_requires_authentication(): void
+    {
+        $this->post(route('posts.store'), [
+            'body' => 'This is a test post.',
+        ])->assertRedirect('/login');
+    }
+
     public function test_post_creation_validation_failure(): void
     {
         $this->actingAsUser()
-            ->post('/posts', [])
+            ->post(route('posts.store'), [])
             ->assertSessionHasErrors('body');
 
         $this->actingAsUser()
-            ->post('/posts', ['body' => ''])
+            ->post(route('posts.store'), ['body' => ''])
             ->assertSessionHasErrors('body');
 
         $this->actingAsUser()
-            ->post('/posts', ['body' => str_repeat('a', 1001)])
+            ->post(route('posts.store'), ['body' => str_repeat('a', 1001)])
             ->assertSessionHasErrors('body');
-    }
-
-    public function test_post_creation_requires_authentication(): void
-    {
-        $this->post('/posts', [
-            'body' => 'This is a test post.',
-        ])->assertRedirect('/login');
     }
 
     public function test_user_can_update_own_post(): void
@@ -74,17 +84,13 @@ class PostTest extends TestCase
         ]);
     }
 
-    public function test_user_can_delete_own_post(): void
+    public function test_guest_cannot_update_post(): void
     {
         $post = $this->createPost();
 
-        $this->actingAsUser()
-            ->delete(route('posts.destroy', $post))
-            ->assertRedirect();
-
-        $this->assertDatabaseMissing('posts', [
-            'id' => $post->id,
-        ]);
+        $this->put(route('posts.update', $post), [
+            'body' => 'test',
+        ])->assertRedirect('/login');
     }
 
     public function test_user_cannot_update_other_users_post(): void
@@ -98,6 +104,38 @@ class PostTest extends TestCase
                 'body' => 'illegal update',
             ])
             ->assertStatus(403);
+    }
+
+    public function test_update_validation_failure(): void
+    {
+        $post = $this->createPost();
+
+        $this->actingAsUser()
+            ->put(route('posts.update', $post), [
+                'body' => '',
+            ])
+            ->assertSessionHasErrors('body');
+    }
+
+    public function test_user_can_delete_own_post(): void
+    {
+        $post = $this->createPost();
+
+        $this->actingAsUser()
+            ->delete(route('posts.destroy', $post))
+            ->assertRedirect(route('posts.index'));
+
+        $this->assertDatabaseMissing('posts', [
+            'id' => $post->id,
+        ]);
+    }
+
+    public function test_guest_cannot_delete_post(): void
+    {
+        $post = $this->createPost();
+
+        $this->delete(route('posts.destroy', $post))
+            ->assertRedirect('/login');
     }
 
     public function test_user_cannot_delete_other_users_post(): void

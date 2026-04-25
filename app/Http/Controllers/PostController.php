@@ -13,19 +13,23 @@ class PostController extends Controller
 {
     public function index(): View
     {
+        $this->authorize('viewAny', Post::class);
+
         return view('posts.index', [
-            'posts' => Post::latestList(),
+            'posts' => Post::latestList()->get(),
         ]);
     }
 
     public function store(CreateRequest $request): RedirectResponse
     {
+        $this->authorize('create', Post::class);
+
         ['body' => $body] = $request->validated();
 
-        Post::createForUser(
-            Auth::id(),
-            $body,
-        );
+        Post::create([
+            'user_id' => Auth::id(),
+            'body' => $body,
+        ]);
 
         return redirect()->route('posts.index');
     }
@@ -41,9 +45,7 @@ class PostController extends Controller
     {
         $this->authorize('update', $post);
 
-        ['body' => $body] = $request->validated();
-
-        $post->updateBody($body);
+        $post->update($request->validated());
 
         return redirect()->route('posts.index');
     }
@@ -52,7 +54,7 @@ class PostController extends Controller
     {
         $this->authorize('delete', $post);
 
-        $post->deletePost();
+        $post->delete();
 
         return redirect()->route('posts.index');
     }
